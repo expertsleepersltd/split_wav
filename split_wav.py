@@ -50,7 +50,8 @@ while remaining > 0:
 for i in range(frames):
 	f = F.readframes(1)
 	p0 = 0
-	progress(i, frames)
+	if i % 10000 == 0:
+		progress(i, frames)
 	for G in GG:
 		p1 = p0 + G.getnchannels() * width
 		G.writeframesraw( f[p0:p1] )
