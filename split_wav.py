@@ -1,6 +1,16 @@
 import sys
 import wave
 
+def progress(count, total):
+	bar_len = 60
+	filled_len = int(round(bar_len * count / float(total)))
+
+	percents = round(100.0 * count / float(total), 1)
+	bar = '=' * filled_len + '-' * (bar_len - filled_len)
+
+	sys.stdout.write('[%s] %s%s\r' % (bar, percents, '%'))
+	sys.stdout.flush()
+
 if len(sys.argv) < 2:
     sys.stderr.write("Usage: split_wav.py <options> <filename>\nOptions:\n-mono : Split to mono files\n")
     sys.exit(1)
@@ -40,6 +50,8 @@ while remaining > 0:
 for i in range(frames):
 	f = F.readframes(1)
 	p0 = 0
+	if i % 10000 == 0:
+		progress(i, frames)
 	for G in GG:
 		p1 = p0 + G.getnchannels() * width
 		G.writeframesraw( f[p0:p1] )
